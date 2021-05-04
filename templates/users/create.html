@@ -1,0 +1,32 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'js/uploader.js' %}"></script>
+{% endblock %}
+{% block title %}Create user{% endblock %}
+{% block body %}
+
+<div class="container" id="formHolder">
+    <div class="row">
+        <div class="col-12 rounded border border-dark">
+            <form role="form" id="patchForm">
+                {% csrf_token %}
+                {% for field in form.visible_fields %}
+                   <div class="row">
+                     <div class="col">{{ field.label|capfirst }}</div>
+                     <div class="col">
+                       {{ field.errors.as_ul }}
+                       {{ field }}
+                     </div>
+                     <span class="border-top my-3"></span>
+                   </div>
+                {% endfor %}
+            </form>
+            <div class="col col-md-6 offset-md-6">
+               <button class="btn-info btn" onclick="uploadPatch('{% url 'create_user' %}','patchForm','formHolder')">Отправить</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

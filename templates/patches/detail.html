@@ -1,0 +1,31 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block script %}
+<script type="text/javascript" src="{% static 'js/customs/create_comment.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/customs/call_permission.js' %}"></script>
+{% endblock %}
+{% block title %}{{ patch.name }}{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-12 rounded border border-dark">
+            <div class="row">
+                <div class="col-6 col-md-4"><h1>{{ patch.name }}</h1></div>
+                <div class="col-6 col-md-4"><h6 class="text-right"><small>Добавлено: {{ patch.date }}</small></h6></div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-md-4"><h6><small>Developer: {{ patch.developer }}</small></h6></div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h5>Описание: </h5> <p style="word-wrap: break-word;">{{ patch.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include "components/empty.html" %}
+{% include "sections/comment_section.html" %}
+{% include "components/empty.html" %}
+{% include "sections/permissions_section.html" with target="patch" not_assigned=users %}
+{% endblock %}

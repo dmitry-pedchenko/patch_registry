@@ -1,0 +1,27 @@
+{% load has_group %}
+<nav class="navbar navbar-expand-lg navbar-fixed-top navbar-dark bg-dark">
+  <div class="navbar-header">
+    <a class="navbar-brand" href="#">Patch Registry</a>
+  </div>
+    <ul class="navbar-nav mr-auto">
+      {% if request.user|has_group:"clients" %}
+      {% include "components/nav_bar_clients_left.html" %}
+      {% elif request.user|has_group:"employees" %}
+      {% include "components/nav_bar_employees_left.html" %}
+      {% endif %}
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      {% if user.is_authenticated %}
+      <li class="nav-item">
+        <a class="nav-link" href="/accounts/profile/">Профиль</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/accounts/logout/">Выйти</a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="/accounts/login/">Войти</a>
+      </li>
+      {% endif %}
+    </ul>
+</nav>

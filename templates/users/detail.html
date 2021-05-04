@@ -1,0 +1,32 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'js/customs/call_permission.js' %}"></script>
+{% endblock %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 rounded border border-dark">
+            <div class="row">
+                <div class="col-6 col-md-4"><h1>{{ user.username }}</h1></div>
+                <div class="col-6 col-md-4"><h6 class="text-right"><small>Последний вход: {{ user.last_login }}</small></h6></div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-md-4"><h6><small>Организация: {{ usermeta.organization }}</small></h6></div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h5>Описание: </h5> <p style="word-wrap: break-word;">{{ usermeta.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include "components/empty.html" %}
+{% include "sections/permissions_section.html" with target="user" not_assigned=patches %}
+{% endblock %}

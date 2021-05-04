@@ -1,0 +1,24 @@
+<li class="dropdown">
+<button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  Патчи
+</button>
+<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+  <a class="dropdown-item" href="{% url 'main:upload' %}">Добавить</a>
+  <a class="dropdown-item" href="{% url 'main:list' %}">Просмотреть</a>
+</div>
+</li>
+<li class="dropdown">
+<button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  Пользователи
+</button>
+<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+  <a class="dropdown-item" href="{% url 'create_user' %}">Добавить</a>
+  <a class="dropdown-item" href="{% url 'list_users' %}">Просмотреть</a>
+</div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'logs:logs' %}">Логи</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'publics:list' %}">Полученые файлы</a>
+</li>

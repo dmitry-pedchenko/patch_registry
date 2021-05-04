@@ -1,0 +1,44 @@
+{% load has_group %}
+<div class="container">
+    <div class="row"> <div class="col-6 col-md-4"><h2>Комментарии</h2></div></div>
+{% for comment in comments %}
+    <div class="row">
+        <div class="col-12 rounded border border-dark">
+            <div class="row">
+                <div class="col-6 col-md-4"><h1>{{ comment.user.username }}</h1></div>
+                <div class="col-6 col-md-4"><h6 class="text-right"><small>Добавлено: {{ comment.date }}</small></h6></div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h5>Комментарий: </h5> <p style="word-wrap: break-word;">{{ comment.comment }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% if request.user|has_group:"employees" %}
+{% include "components/empty.html" %}
+<div class="container" id="formHolder">
+    <div class="row">
+        <div class="col-12 rounded border border-dark">
+            <form role="form" id="commentForm">
+                {% csrf_token %}
+                {% for field in comment_form %}
+                   <div class="row" id="div_{{ field.id_for_label }}" {% if field.is_hidden %}style="display: none;"{% endif %}>
+                     <div class="col">{{ field.label|capfirst }}</div>
+                     <div class="col">
+                       {{ field.errors.as_ul }}
+                       {{ field }}
+                     </div>
+                     <span class="border-top my-3"></span>
+                   </div>
+                {% endfor %}
+            </form>
+            <div class="col col-md-6 offset-md-6">
+               <button class="btn-info btn" onclick="window.createComment('{% url 'main:patch_action' uid=patch.uid action='comment' %}', 'commentForm')">Отправить</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

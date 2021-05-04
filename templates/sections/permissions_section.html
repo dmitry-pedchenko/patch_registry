@@ -1,0 +1,85 @@
+{% load has_group %}
+{% if permissions  and request.user|has_group:"employees" %}
+<form id="set_permission">{% csrf_token %}</form>
+<div class="container">
+    <div class="row">
+        <div class="col-6 col-md-4"><h2>Права доступа</h2></div>
+        <div class="col-12 rounded border border-dark">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col" class="text-center">{% if target == 'patch' %}Пользователь{% else %}Патч{% endif %}</th>
+                      <th scope="col">Доступ</th>
+                      <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for permission in permissions %}
+                    {% if permission.level == 1 and target == 'user' %}
+                        {% url 'main:patch' uid=permission.patch.uid as target_url %}
+                        {% with tr_class="bg-secondary text-white" btn_class="btn btn-link btn-block text-white" %}
+                        {% with target_level=0 target_uid=permission.patch.uid target_username=permission.user.username target_counter=forloop.counter target_item_url=target_url target_item_name=permission.patch.name %}
+                        {% include "components/tr_permission_forloop.html" with permission_status="Чтение" permission_action="Запретить" patch_name=permission.patch.name %}
+                        {% endwith %}
+                        {% endwith %}
+                    {% elif permission.level == 0 and target == 'user' %}
+                        {% url 'main:patch' uid=permission.patch.uid as target_url %}
+                        {% with tr_class="bg-danger text-white" btn_class="btn btn-link btn-block text-white" %}
+                        {% with target_level=1 target_uid=permission.patch.uid target_username=permission.user.username target_counter=forloop.counter target_item_url=target_url target_item_name=permission.patch.name %}
+                        {% include "components/tr_permission_forloop.html" with permission_status="Запрещен" permission_action="Разрешить" patch_name=permission.patch.name %}
+                        {% endwith %}
+                        {% endwith %}
+                    {% elif permission.level == 1 and target == 'patch' %}
+                        {% url 'user' uid=permission.user.username as target_url %}
+                        {% with tr_class="bg-secondary text-white" btn_class="btn btn-link btn-block text-white" %}
+                        {% with target_level=0 target_uid=permission.patch.uid target_username=permission.user.username target_counter=forloop.counter target_item_url=target_url target_item_name=permission.user.username %}
+                        {% include "components/tr_permission_forloop.html" with permission_status="Чтение" permission_action="Запретить" patch_name=permission.patch.name %}
+                        {% endwith %}
+                        {% endwith %}
+                    {% elif permission.level == 0 and target == 'patch' %}
+                        {% url 'user' uid=permission.user.username as target_url %}
+                        {% with tr_class="bg-danger text-white" btn_class="btn btn-link btn-block text-white" %}
+                        {% with target_level=1 target_uid=permission.patch.uid target_username=permission.user.username target_counter=forloop.counter target_item_url=target_url target_item_name=permission.user.username %}
+                        {% include "components/tr_permission_forloop.html" with permission_status="Запрещен" permission_action="Разрешить" patch_name=permission.patch.name %}
+                        {% endwith %}
+                        {% endwith %}
+                    {% else %}
+                        <tr><td colspan="4">Ошибка... Что-то пошло совсем не так. Обратитесь к администратору.</td></tr>
+                    {% endif %}
+                    {% endfor %}
+                    {% for permission in unknowns %}
+                    {% if target == 'user' %}
+                        {% url 'main:patch' uid=permission.uid as target_url %}
+                        {% with tr_class="bg-light text-dark" btn_class="btn btn-link btn-block text-dark" %}
+                        {% with target_level=1 target_uid=permission.uid target_username=user.username target_counter=permissions|length|add:forloop.counter target_item_url=target_url target_item_name=permission.name %}
+                        {% include "components/tr_permission_forloop" with permission_status="Нет данных" permission_action="Разрешить" patch_name=permission.name %}
+                        {% endwith %}
+                        {% endwith %}
+                    {% elif target == 'patch' %}
+                        {% url 'user' uid=permission.username as target_url %}
+                        {% with tr_class="bg-light text-dark" btn_class="btn btn-link btn-block text-dark" %}
+                        {% with target_level=1 target_uid=patch.uid target_username=permission.user.username target_counter=permissions|length|add:forloop.counter target_item_url=target_url target_item_name=permission.username %}
+                        {% include "components/tr_permission_forloop" with permission_status="Нет данных" permission_action="Разрешить" patch_name=permission.name %}}
+                        {% endwith %}
+                        {% endwith %}
+                    {% else %}
+                         <tr><td colspan="4">Ошибка... Что-то пошло совсем не так. Обратитесь к администратору.</td></tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% elif not permissions %}
+<div class="container">
+    <div class="col-12 rounded border border-dark">
+        <div class="row">
+            <div class="col bg-success text-white">
+              Не найдено информации о досупе для этого пользователя.
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

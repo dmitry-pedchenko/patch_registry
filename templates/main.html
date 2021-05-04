@@ -1,0 +1,34 @@
+{% load static %}
+{% load has_group %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/customs/basic.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/customs/message.js' %}"></script>
+    {% block script %}{% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+{% include "header.html" %}
+{% include "components/empty.html" %}
+{% include "messager.html" %}
+{% include "components/empty.html" %}
+{% if request.user|has_group:"clients" or request.user|has_group:"employees" or request.path == '/accounts/login/' or request.path == '/accounts/logout/' %}
+{% block body %}
+{% endblock %}
+{% else %}
+<div class="container">
+    <div class="card">
+      <div class="card-body">
+        У Вас нет прав. Обратитесь к администратору (support@iso.ru) для предоставления доступа.
+      </div>
+    </div>
+</div>
+{% endif %}
+</body>
+</html>

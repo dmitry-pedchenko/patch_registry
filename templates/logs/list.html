@@ -1,0 +1,36 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}Logs{% endblock %}
+{% block body %}
+{% include "sections/paginator.html" %}
+<div class="container border border-dark">
+    <table class="table">
+        <thead class="thead-dark">
+            <th scope="col">#</th>
+            <th scope="col" class="align-middle text-center">Дата</th>
+            <th scope="col">Источник</th>
+            <th scope="col">Уровень</th>
+            <th scope="col">Тип</th>
+            <th scope="col">Пользователь</th>
+            <th scope="col">Объект</th>
+            <th scope="col">Сообщение</th>
+        </thead>
+        <tbody>
+            {% for entry in content %}
+            <tr>
+                <th class="align-middle" scope="row">{{ forloop.counter }}</th>
+                <td class="align-middle">{{ entry.date }}</td>
+                <td class="align-middle">{{ entry.source }}</td>
+                <td class="align-middle">{{ entry.level }}</td>
+                <td class="align-middle">{{ entry.type }}</td>
+                <td class="align-middle">{% if entry.user %}{{ entry.user.username }}{% else %}Неопределен.{% endif %}</td>
+                <td class="align-middle">{% if entry.patch %}{{ entry.patch.name }}{% else %}Неопределен.{% endif %}</td>
+                <td class="align-middle">{{ entry.message }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% include "components/empty.html" %}
+{% include "sections/paginator.html" %}
+{% endblock %}

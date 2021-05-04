@@ -1,0 +1,46 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'js/uploader.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/former.js' %}"></script>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        field_reassignment("div_id_category","id_category","div_id_newcategory","id_newcategory","Новая");
+        field_reassignment("div_id_subcategory","id_subcategory","div_id_newsubcategory","id_newsubcategory","Новая");
+
+        var select1 = document.getElementById("id_category");
+        select1.setAttribute('onchange', 'field_reassignment("div_id_category","id_category","div_id_newcategory","id_newcategory","Новая")');
+
+        var select2 = document.getElementById("id_subcategory");
+        select2.setAttribute('onchange', 'field_reassignment("div_id_subcategory","id_subcategory","div_id_newsubcategory","id_newsubcategory","Новая")');
+    });
+</script>
+{% endblock %}
+{% block title %}Upload file{% endblock %}
+{% block body %}
+
+{% include "components/empty.html" %}
+<div class="container " id="formHolder">
+    <div class="row">
+        <div class="col-12 rounded border border-dark">
+            <form role="form" id="patchForm">
+                {% csrf_token %}
+                {% for field in form %}
+                   <div class="row" id="div_{{ field.id_for_label }}" {% if field.is_hidden %}style="display: none;"{% endif %}>
+                     <div class="col">{{ field.label|capfirst }}</div>
+                     <div class="col">
+                       {{ field.errors.as_ul }}
+                       {{ field }}
+                     </div>
+                     <span class="border-top my-3"></span>
+                   </div>
+                {% endfor %}
+            </form>
+            <div class="col col-md-6 offset-md-6">
+               <button class="btn-info btn" onclick="uploadPatch('{% url 'main:upload' %}','patchForm','formHolder')">Отправить</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

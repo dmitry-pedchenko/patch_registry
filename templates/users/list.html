@@ -1,0 +1,32 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block title %}Patch List{% endblock %}
+
+{% block body %}
+
+<div class="container border border-dark">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col" class="align-middle text-center">Логин</th>
+              <th scope="col">Почта</th>
+              <th scope="col">Организация</th>
+              <th scope="col">Заходил</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user, organization in content %}
+            <tr>
+                <th class="align-middle" scope="row">{{ forloop.counter }}</th>
+                <td class="align-middle"><a role="button" class="btn btn-link btn-block" href="{% url 'user' uid=user.username %}">{{ user.username }}</a></td>
+                <td class="align-middle">{{ user.email }}</td>
+                <td class="align-middle">{{ organization.meta_value }}</td>
+                <td class="align-middle">{{ user.last_login  }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
